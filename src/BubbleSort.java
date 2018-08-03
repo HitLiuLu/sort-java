@@ -24,6 +24,47 @@ public class BubbleSort {
         }
     }
 
+    // 增加一个flag以判断后面循环还需不需要
+    public static void sortOptimize(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int flag = 0;
+
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                    flag = 1;
+                }
+            }
+
+            if (flag == 0) {
+                return;
+            }
+        }
+    }
+
+    public static void sortOptimize2(int[] arr) {
+        int n = arr.length;
+        int k = n - 1, pos = 0;
+        for (int i = 0; i < n - 1; i++) {
+            int flag = 0;
+
+            for (int j = 0; j < k; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                    flag = 1;  // 只要发生了交换，flag就置1
+                    pos = j;  // 记录最后一次交换的位置
+                }
+            }
+
+            k = pos;    // 每趟扫描中，记住最后一次交换发生的位置lastExchange，（该位置之后的相邻记录均已有序）。
+                        // 下一趟排序开始时，R[1..lastExchange-1]是无序区，R[lastExchange..n]是有序区。
+            if (flag == 0) {
+                return;
+            }
+        }
+    }
+
     private static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
@@ -32,7 +73,9 @@ public class BubbleSort {
 
     public static void main(String[] args) {
         int[] arr = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        BubbleSort.sort(arr);
+//        BubbleSort.sort(arr);
+//        BubbleSort.sortOptimize(arr);
+        BubbleSort.sortOptimize2(arr);
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i]);
             System.out.print(" ");
