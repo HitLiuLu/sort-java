@@ -15,30 +15,29 @@ public class QuickSort {
      * @param a
      * @param start
      * @param end
+     * https://blog.csdn.net/nrsc272420199/article/details/82587933
      */
-    private static int divide(int[] arr, int left, int right) {
+    private static int partition(int[] arr, int low, int high) {
         // 每次都以最右边的元素作为基准值
-        int pivot = arr[right];
-        // left一旦等于right.就说明左右两个指针合并到了同一位置，可以结束此轮循环。
-        while (left < right) {
-            while (left < right && arr[left] < pivot) {
-                // 从左边开始遍历，若比基准值小，则继续往右走
-                left++;
+        int pivot = arr[low];
+        // low一旦等于high，就说明左右两个指针合并到了同一位置，结束此轮循环
+        while (low < high) {
+            // 当队尾元素大于基准数据时，向前挪动high指针
+            while (low < high && arr[high] > pivot) {
+                high--;
             }
-            // while循环结束后，说明当前的arr[left]的值比基准值大，此时应当交换
-            if(left < right) {
-                swap(arr, left, right);
-                right--;
+            // 如果队尾元素小于pivot了，需要将其赋值给low
+            arr[low] = arr[high];
+            // 当队首元素大于pivot时，向后移动low指针
+            while (low < high && arr[low] <= pivot) {
+                low++;
             }
-            while (left < right && arr[right] > pivot) {
-                right--;
-            }
-            if (left < right) {
-                swap(arr, left, right);
-                left++;
-            }
+            // 当队首元素大于pivot时，需要将其赋值给high
+            arr[high] = arr[low];
         }
-        return left;
+        arr[low] = pivot;
+        // 获取pivot的正确位置
+        return low;
     }
 
     private static void swap(int[] arr, int i, int j) {
@@ -48,14 +47,11 @@ public class QuickSort {
     }
 
     private static void sort(int[] arr, int left, int right) {
-        if (left >= right) {
-            return;
-        }
-        else {
-            int pivot = divide(arr, left, right);
-            sort(arr, left, pivot - 1);
-            sort(arr, pivot + 1, right);
-        }
+        if (left >= right) return;
+
+        int pivot = partition(arr, left, right);
+        sort(arr, left, pivot - 1);
+        sort(arr, pivot + 1, right);
     }
 
     public static void main(String[] args) {
